@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 const IssueDetails = (props) => {
     const issue = props.details;
   return (
@@ -31,7 +32,7 @@ const IssueDetails = (props) => {
           <span className="label2">Arrival Time (Local):&nbsp; </span>
           <span className="value">{issue.legs[0].aircraftArrivalTimeLT}</span>
         </div>
- 
+        <Link to="/" >Back</Link>
       </div>
   );
 }
