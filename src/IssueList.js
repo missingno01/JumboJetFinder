@@ -7,9 +7,14 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import { withStyles } from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 
 const styles = (theme) => ({
+  root: {
+    flexGrow: 1,
+  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
@@ -29,12 +34,16 @@ class IssueList extends Component {
       issues: [],
       airlines: "",
       acType: "",
+      origin:"",
+      dest:"",
       status: 0,
     };
     this.leftClick = this.leftClick.bind(this)
     this.rightClick = this.rightClick.bind(this)
     this.handleAirlines = this.handleAirlines.bind(this)
     this.handleAircraft = this.handleAircraft.bind(this)
+    this.handleOrigin = this.handleOrigin.bind(this)
+    this.handleDest = this.handleDest.bind(this)
   }
 
   leftClick() {
@@ -55,28 +64,55 @@ class IssueList extends Component {
     this.setState({ airlines: e.target.value });
   }
 
+  handleOrigin(e) {
+    this.setState({origin: e.target.value});
+  }
+
+  handleDest(e) {
+    this.setState({dest: e.target.value});
+  }
+
   handleAircraft(e) {
     this.setState({ acType: e.target.value });
   }
 
   handleSubmit(e) {
-    this.setState({isLoaded: false, status: 0});
+    this.setState({ isLoaded: false, status: 0, issues: [] });
     e.preventDefault();
     var config = {
       headers: {
         'Authorization': 'Bearer g2g7vkdmwzx7dt6stvvrt35s'
       }
     };
-    if(this.state.airlines === '' || this.state.acType === '') {
-      alert('Please select airlines and aircraft');
+    if (this.state.airlines === '') {
+      alert('Please select airlines');
       return;
     }
 
-    axios.get('https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=' + this.state.airlines + '&startDate=01JUN21&endDate=09JUN21&daysOfOperation=1234567&timeMode=UTC&aircraftTypes=' + this.state.acType, config).then((res) => {
-      console.log(res)
+    let url = 'https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=' + this.state.airlines + '&startDate=01JUN21&endDate=09JUN21&daysOfOperation=1234567&timeMode=UTC';
+    if (this.state.acType.length > 0) {
+      url += '&aircraftTypes=' + this.state.acType;
+    }
+
+    if (this.state.origin.length > 0 && this.state.origin.length !== 3) {
+      alert('ICAO code should be 3 letters for origin')
+      return;
+    }
+    if (this.state.origin.length > 0) {
+      url += '&origin=' + this.state.origin;
+    }
+    if (this.state.dest.length > 0 && this.state.dest.length !== 3) {
+      alert('ICAO code should be 3 letters for destination')
+      return;
+    }
+    if (this.state.dest.length > 0) {
+      url += '&destination=' + this.state.dest;
+    }
+
+    axios.get(url, config).then((res) => {
       if (res.status === 200 || res.status === 206) {
         console.log(res.data);
-        this.setState({isLoaded: true, issues: res.data, status: res.status})
+        this.setState({ isLoaded: true, issues: res.data, status: res.status })
       }
     }).catch((err) => {
       console.log(err)
@@ -96,42 +132,56 @@ class IssueList extends Component {
       <div className="container">
         <h1>Jumbo Jet Finder| List of Flights</h1>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-helper-label">Airlines</InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={this.state.airlines}
-              onChange={this.handleAirlines}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'LH'}>Lufthansa</MenuItem>
-              <MenuItem value={'LX'}>Swiss Air</MenuItem>
-            </Select>
-            <FormHelperText>Select an airline</FormHelperText>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-helper-label">Aircraft type</InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={this.state.acType}
-              onChange={this.handleAircraft}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'744'}>Boeing 747-400</MenuItem>
-              <MenuItem value={'74H'}>Boeing 747-800</MenuItem>
-              <MenuItem value={'343'}>Airbus A340-300</MenuItem>
-            </Select>
-            <FormHelperText>Select an aircraft type</FormHelperText>
-          </FormControl>
-          <Button variant="contained" color="primary" type="submit">
-            Submit
-          </Button>
+          <Grid container justify="center" spacing={3}>
+            <Grid item>
+              <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Airlines</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.airlines}
+                  onChange={this.handleAirlines}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'LH'}>Lufthansa</MenuItem>
+                  <MenuItem value={'LX'}>Swiss Air</MenuItem>
+                </Select>
+                <FormHelperText>Select an airline</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Aircraft type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.acType}
+                  onChange={this.handleAircraft}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'744'}>Boeing 747-400</MenuItem>
+                  <MenuItem value={'74H'}>Boeing 747-800</MenuItem>
+                  <MenuItem value={'343'}>Airbus A340-300</MenuItem>
+                </Select>
+                <FormHelperText>Select an aircraft type</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <TextField id="standard-basic" label="Origin ICAO" onChange={(e) => this.handleOrigin(e)}/>
+            </Grid>
+            <Grid item>
+              <TextField id="standard-basic" label="Dest. ICAO" onChange={(e) => this.handleDest(e)}/>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="primary" type="submit">
+                Find flights
+              </Button>
+            </Grid>
+          </Grid>
         </form>
         {this.state.isLoaded ?
           <div>
