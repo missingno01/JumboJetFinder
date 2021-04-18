@@ -23,6 +23,7 @@ import {Link} from "react-router-dom";
         ['32A', '2.56 L/100 km'],
         ['32B', '2.45 L/100 km'],
         ['77W', '2.91 L/100 km'],
+        ['787', '2.49 L/100 km'],
     ])
 
 const IssueDetails = (props) => {
