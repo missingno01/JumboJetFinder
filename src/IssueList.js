@@ -11,6 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 
+
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -34,8 +36,8 @@ class IssueList extends Component {
       issues: [],
       airlines: "",
       acType: "",
-      origin:"",
-      dest:"",
+      origin: "",
+      dest: "",
       status: 0,
     };
     this.leftClick = this.leftClick.bind(this)
@@ -65,11 +67,11 @@ class IssueList extends Component {
   }
 
   handleOrigin(e) {
-    this.setState({origin: e.target.value});
+    this.setState({ origin: e.target.value });
   }
 
   handleDest(e) {
-    this.setState({dest: e.target.value});
+    this.setState({ dest: e.target.value });
   }
 
   handleAircraft(e) {
@@ -121,6 +123,7 @@ class IssueList extends Component {
   }
 
   render() {
+
     const { classes } = this.props;
     let issueViews;
     if (this.state.isLoaded) {
@@ -166,15 +169,33 @@ class IssueList extends Component {
                   <MenuItem value={'744'}>Boeing 747-400</MenuItem>
                   <MenuItem value={'74H'}>Boeing 747-800</MenuItem>
                   <MenuItem value={'343'}>Airbus A340-300</MenuItem>
+                  <MenuItem value={'359'}>Airbus A350-900</MenuItem>
+                  <MenuItem value={'333'}>Airbus A330-300</MenuItem>
+                  <MenuItem value={'100'}>Fokker 100</MenuItem>
+                  <MenuItem value={'141'}>BAE Systems 146-100</MenuItem>
+                  <MenuItem value={'142'}>BAE Systems 146-200</MenuItem>
+                  <MenuItem value={'143'}>BAE Systems 146-300</MenuItem>
+                  <MenuItem value={'312'}>Airbus A310-200</MenuItem>
+                  <MenuItem value={'313'}>Airbus A310-300</MenuItem>
+                  <MenuItem value={'318'}>Airbus A318</MenuItem>
+                  <MenuItem value={'319'}>Airbus A319</MenuItem>
+                  <MenuItem value={'31A'}>Airbus A318 (sharklets)</MenuItem>
+                  <MenuItem value={'31B'}>Airbus A319 (sharklets)</MenuItem>
+                  <MenuItem value={'31N'}>Airbus A139neo</MenuItem>
+                  <MenuItem value={'320'}>Airbus A320</MenuItem>
+                  <MenuItem value={'321'}>Airbus A321</MenuItem>
+                  <MenuItem value={'32A'}>Airbus A320 (sharklets)</MenuItem>
+                  <MenuItem value={'32B'}>Airbus A321 (sharklets)</MenuItem>
+                  <MenuItem value={'77W'}>Boeing 777-300ER</MenuItem>
                 </Select>
                 <FormHelperText>Select an aircraft type</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item>
-              <TextField id="standard-basic" label="Origin ICAO" onChange={(e) => this.handleOrigin(e)}/>
+              <TextField id="standard-basic" label="Origin ICAO" onChange={(e) => this.handleOrigin(e)} />
             </Grid>
             <Grid item>
-              <TextField id="standard-basic" label="Dest. ICAO" onChange={(e) => this.handleDest(e)}/>
+              <TextField id="standard-basic" label="Dest. ICAO" onChange={(e) => this.handleDest(e)} />
             </Grid>
             <Grid item>
               <Button variant="contained" color="primary" type="submit">
