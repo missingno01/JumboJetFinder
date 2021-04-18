@@ -58,7 +58,7 @@ const IssueDetails = (props) => {
           <span className="value">{issue.legs[0].aircraftArrivalTimeLT}</span>
         </div>
         <div className="field">
-          <span className="label2">Carbon Emissions:&nbsp; </span>
+          <span className="label2">Fuel per seat:&nbsp; </span>
           <span className="value">{emissions.get(issue.legs[0].aircraftType)}</span>
         </div>
         <Link to="/" >Back</Link>
