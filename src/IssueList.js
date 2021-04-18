@@ -180,7 +180,7 @@ class IssueList extends Component {
     }
     return (
       <div className="container">
-        <h1>Jumbo Jet Finder | List of Flights</h1>
+        <h1>ecoJet | List of Flights</h1>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <Grid container justify="center" spacing={2}>
             <Grid item>
