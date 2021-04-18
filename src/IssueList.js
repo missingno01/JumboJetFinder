@@ -261,7 +261,7 @@ class IssueList extends Component {
                   <MenuItem value={'FEB'}>February</MenuItem>
                   <MenuItem value={'MAR'}>March</MenuItem>
                   <MenuItem value={'APR'}>April</MenuItem>
-                  <MenuItem value={'MAY'}>MAY</MenuItem>
+                  <MenuItem value={'MAY'}>May</MenuItem>
                   <MenuItem value={'JUN'}>June</MenuItem>
                   <MenuItem value={'JUL'}>July</MenuItem>
                   <MenuItem value={'AUG'}>August</MenuItem>
@@ -332,7 +332,7 @@ class IssueList extends Component {
                   <MenuItem value={'FEB'}>February</MenuItem>
                   <MenuItem value={'MAR'}>March</MenuItem>
                   <MenuItem value={'APR'}>April</MenuItem>
-                  <MenuItem value={'MAY'}>MAY</MenuItem>
+                  <MenuItem value={'MAY'}>May</MenuItem>
                   <MenuItem value={'JUN'}>June</MenuItem>
                   <MenuItem value={'JUL'}>July</MenuItem>
                   <MenuItem value={'AUG'}>August</MenuItem>
