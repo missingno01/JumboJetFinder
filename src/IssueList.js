@@ -165,7 +165,7 @@ class IssueList extends Component {
     }
 
     if (
-      (parseInt(this.state.endDate.getDate()[0]) > 3 &&
+      (parseInt((this.state.endDate.getDate() + "")[0]) > 3 &&
         this.state.endDay.length > 1) ||
       (parseInt(this.state.endDate.getDate()) < 10 &&
         this.state.endDay.length < 2)
