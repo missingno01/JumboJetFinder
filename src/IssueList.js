@@ -57,18 +57,22 @@ class IssueList extends Component {
 
   handleAircraft(e) {
     this.setState({ acType: e.target.value });
-    console.log(e);
   }
 
   handleSubmit(e) {
+    this.setState({isLoaded: false, status: 0});
     e.preventDefault();
     var config = {
       headers: {
         'Authorization': 'Bearer g2g7vkdmwzx7dt6stvvrt35s'
       }
     };
+    if(this.state.airlines === '' || this.state.acType === '') {
+      alert('Please select airlines and aircraft');
+      return;
+    }
 
-    axios.get('https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=LH&startDate=01JUN21&endDate=09JUN21&daysOfOperation=1234567&timeMode=UTC', config).then((res) => {
+    axios.get('https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=' + this.state.airlines + '&startDate=01JUN21&endDate=09JUN21&daysOfOperation=1234567&timeMode=UTC&aircraftTypes=' + this.state.acType, config).then((res) => {
       console.log(res)
       if (res.status === 200 || res.status === 206) {
         console.log(res.data);
