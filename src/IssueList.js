@@ -38,6 +38,12 @@ class IssueList extends Component {
       acType: "",
       origin: "",
       dest: "",
+      month: "",
+      day: "",
+      year: "",
+      endMonth: "",
+      endDay: "",
+      endYear: "",
       status: 0,
     };
     this.leftClick = this.leftClick.bind(this)
@@ -46,6 +52,12 @@ class IssueList extends Component {
     this.handleAircraft = this.handleAircraft.bind(this)
     this.handleOrigin = this.handleOrigin.bind(this)
     this.handleDest = this.handleDest.bind(this)
+    this.handleMonth = this.handleMonth.bind(this)
+    this.handleDay = this.handleDay.bind(this)
+    this.handleYear = this.handleYear.bind(this)
+    this.handleEndMonth = this.handleEndMonth.bind(this)
+    this.handleEndDay = this.handleEndDay.bind(this)
+    this.handleEndYear = this.handleEndYear.bind(this)
   }
 
   leftClick() {
@@ -70,6 +82,30 @@ class IssueList extends Component {
     this.setState({ origin: e.target.value });
   }
 
+  handleMonth(e) {
+    this.setState({ month: e.target.value });
+  }
+
+  handleDay(e) {
+    this.setState({ day: e.target.value });
+  }
+
+  handleYear(e) {
+    this.setState({ year: e.target.value });
+  }
+
+  handleEndMonth(e) {
+    this.setState({ endMonth: e.target.value });
+  }
+
+  handleEndDay(e) {
+    this.setState({ endDay: e.target.value });
+  }
+
+  handleEndYear(e) {
+    this.setState({ endYear: e.target.value });
+  }
+
   handleDest(e) {
     this.setState({ dest: e.target.value });
   }
@@ -91,7 +127,18 @@ class IssueList extends Component {
       return;
     }
 
-    let url = 'https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=' + this.state.airlines + '&startDate=01JUN21&endDate=09JUN21&daysOfOperation=1234567&timeMode=UTC';
+    if ((parseInt(this.state.day[0]) > 3 && this.state.day.length > 1) || (parseInt(this.state.day) < 10 && this.state.day.length < 2)) {
+      alert("please fix start day")
+      return;
+    }
+
+    if ((parseInt(this.state.endDay[0]) > 3 && this.state.endDay.length > 1) || (parseInt(this.state.endDay) < 10 && this.state.endDay.length < 2)) {
+      alert("please fix end day")
+      return;
+    }
+
+    let url = 'https://api.lufthansa.com/v1/flight-schedules/flightschedules/passenger?airlines=' + this.state.airlines + '&startDate=' + this.state.day + this.state.month +
+     this.state.year + '&endDate=' + this.state.endDay + this.state.endMonth + this.state.endYear + '&daysOfOperation=1234567&timeMode=UTC';
     if (this.state.acType.length > 0) {
       url += '&aircraftTypes=' + this.state.acType;
     }
@@ -133,9 +180,9 @@ class IssueList extends Component {
     }
     return (
       <div className="container">
-        <h1>Jumbo Jet Finder| List of Flights</h1>
+        <h1>Jumbo Jet Finder | List of Flights</h1>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <Grid container justify="center" spacing={3}>
+          <Grid container justify="center" spacing={2}>
             <Grid item>
               <FormControl required className={classes.formControl}>
                 <InputLabel id="demo-simple-select-helper-label">Airlines</InputLabel>
@@ -183,6 +230,7 @@ class IssueList extends Component {
                   <MenuItem value={'31B'}>Airbus A319 (sharklets)</MenuItem>
                   <MenuItem value={'31N'}>Airbus A139neo</MenuItem>
                   <MenuItem value={'320'}>Airbus A320</MenuItem>
+                  <MenuItem value={'32N'}>Airbus A320 NEO</MenuItem>
                   <MenuItem value={'321'}>Airbus A321</MenuItem>
                   <MenuItem value={'32A'}>Airbus A320 (sharklets)</MenuItem>
                   <MenuItem value={'32B'}>Airbus A321 (sharklets)</MenuItem>
@@ -196,6 +244,148 @@ class IssueList extends Component {
             </Grid>
             <Grid item>
               <TextField id="standard-basic" label="Dest. ICAO" onChange={(e) => this.handleDest(e)} />
+            </Grid>
+            <Grid item>
+              <FormControl required className={classes.formControl}>
+                <InputLabel required id="demo-simple-select-helper-label">Start Month</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.month}
+                  onChange={this.handleMonth}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'JAN'}>January</MenuItem>
+                  <MenuItem value={'FEB'}>February</MenuItem>
+                  <MenuItem value={'MAR'}>March</MenuItem>
+                  <MenuItem value={'APR'}>April</MenuItem>
+                  <MenuItem value={'MAY'}>MAY</MenuItem>
+                  <MenuItem value={'JUN'}>June</MenuItem>
+                  <MenuItem value={'JUL'}>July</MenuItem>
+                  <MenuItem value={'AUG'}>August</MenuItem>
+                  <MenuItem value={'SEP'}>September</MenuItem>
+                  <MenuItem value={'OCT'}>October</MenuItem>
+                  <MenuItem value={'NOV'}>November</MenuItem>
+                  <MenuItem value={'DEC'}>December</MenuItem>
+                </Select>
+                <FormHelperText>Select Start month</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+            <FormControl required className={classes.formControl}>
+                <TextField required id="standard-basic" label="Start Day" onChange={(e) => this.handleDay(e)} />
+                <FormHelperText>Enter two digits</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Start Year</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.year}
+                  onChange={this.handleYear}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'01'}>2001</MenuItem>
+                  <MenuItem value={'02'}>2002</MenuItem>
+                  <MenuItem value={'03'}>2003</MenuItem>
+                  <MenuItem value={'04'}>2004</MenuItem>
+                  <MenuItem value={'05'}>2005</MenuItem>
+                  <MenuItem value={'06'}>2006</MenuItem>
+                  <MenuItem value={'07'}>2007</MenuItem>
+                  <MenuItem value={'08'}>2008</MenuItem>
+                  <MenuItem value={'09'}>2009</MenuItem>
+                  <MenuItem value={'10'}>2010</MenuItem>
+                  <MenuItem value={'11'}>2011</MenuItem>
+                  <MenuItem value={'12'}>2012</MenuItem>
+                  <MenuItem value={'13'}>2013</MenuItem>
+                  <MenuItem value={'14'}>2014</MenuItem>
+                  <MenuItem value={'15'}>2015</MenuItem>
+                  <MenuItem value={'16'}>2016</MenuItem>
+                  <MenuItem value={'17'}>2017</MenuItem>
+                  <MenuItem value={'18'}>2018</MenuItem>
+                  <MenuItem value={'19'}>2019</MenuItem>
+                  <MenuItem value={'20'}>2020</MenuItem>
+                  <MenuItem value={'21'}>2021</MenuItem>
+                </Select>
+                <FormHelperText>Select Start Year</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">End Month</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.endMonth}
+                  onChange={this.handleEndMonth}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'JAN'}>January</MenuItem>
+                  <MenuItem value={'FEB'}>February</MenuItem>
+                  <MenuItem value={'MAR'}>March</MenuItem>
+                  <MenuItem value={'APR'}>April</MenuItem>
+                  <MenuItem value={'MAY'}>MAY</MenuItem>
+                  <MenuItem value={'JUN'}>June</MenuItem>
+                  <MenuItem value={'JUL'}>July</MenuItem>
+                  <MenuItem value={'AUG'}>August</MenuItem>
+                  <MenuItem value={'SEP'}>September</MenuItem>
+                  <MenuItem value={'OCT'}>October</MenuItem>
+                  <MenuItem value={'NOV'}>November</MenuItem>
+                  <MenuItem value={'DEC'}>December</MenuItem>
+                </Select>
+                <FormHelperText>Select End Month</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <FormControl required className={classes.formControl}>
+                <TextField required id="standard-basic" label="End Day" onChange={(e) => this.handleEndDay(e)} />
+                <FormHelperText>Enter two digits</FormHelperText>
+              </FormControl>
+            </Grid>
+            <Grid item>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">End Year</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={this.state.endYear}
+                  onChange={this.handleEndYear}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={'01'}>2001</MenuItem>
+                  <MenuItem value={'02'}>2002</MenuItem>
+                  <MenuItem value={'03'}>2003</MenuItem>
+                  <MenuItem value={'04'}>2004</MenuItem>
+                  <MenuItem value={'05'}>2005</MenuItem>
+                  <MenuItem value={'06'}>2006</MenuItem>
+                  <MenuItem value={'07'}>2007</MenuItem>
+                  <MenuItem value={'08'}>2008</MenuItem>
+                  <MenuItem value={'09'}>2009</MenuItem>
+                  <MenuItem value={'10'}>2010</MenuItem>
+                  <MenuItem value={'11'}>2011</MenuItem>
+                  <MenuItem value={'12'}>2012</MenuItem>
+                  <MenuItem value={'13'}>2013</MenuItem>
+                  <MenuItem value={'14'}>2014</MenuItem>
+                  <MenuItem value={'15'}>2015</MenuItem>
+                  <MenuItem value={'16'}>2016</MenuItem>
+                  <MenuItem value={'17'}>2017</MenuItem>
+                  <MenuItem value={'18'}>2018</MenuItem>
+                  <MenuItem value={'19'}>2019</MenuItem>
+                  <MenuItem value={'20'}>2020</MenuItem>
+                  <MenuItem value={'21'}>2021</MenuItem>
+                </Select>
+                <FormHelperText>Select start year</FormHelperText>
+              </FormControl>
             </Grid>
             <Grid item>
               <Button variant="contained" color="primary" type="submit">
