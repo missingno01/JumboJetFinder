@@ -256,12 +256,20 @@ class IssueList extends Component {
     let issueViews;
     if (this.state.isLoaded) {
       issueViews = this.state.issues
-        .slice((this.state.pageNum - 1) * 10, this.state.pageNum * 10)
         .sort(
           (a, b) =>
-            emissions.get(a.legs[0].aircraftType) -
-            emissions.get(b.legs[0].aircraftType)
+            (emissions.get(a.legs[0].aircraftType)
+              ? parseFloat(
+                  emissions.get(a.legs[0].aircraftType).substring(0, 4)
+                )
+              : 1000) -
+            (emissions.get(b.legs[0].aircraftType)
+              ? parseFloat(
+                  emissions.get(b.legs[0].aircraftType).substring(0, 4)
+                )
+              : 1000)
         )
+        .slice((this.state.pageNum - 1) * 10, this.state.pageNum * 10)
         .map((issue) => (
           <IssueView
             key={issue.id}
