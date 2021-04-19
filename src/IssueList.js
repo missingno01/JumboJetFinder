@@ -15,7 +15,6 @@ import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
@@ -50,12 +49,17 @@ let emissions = new Map([
   ["31B", "2.89 L/100 km"],
   ["31N", "1.93 L/100 km"],
   ["320", "2.61 L/100 km"],
+  ["32Q", "2.61 L/100 km"],
+  ["32A", "2.61 L/100 km"],
+  ["CJ9", "4.91 L/100 km"],
   ["32N", "2.25 L/100 km"],
   ["321", "2.50 L/100 km"],
   ["32A", "2.56 L/100 km"],
   ["32B", "2.45 L/100 km"],
   ["77W", "2.91 L/100 km"],
   ["787", "2.49 L/100 km"],
+  ['E90', '3.54 L/100 km'],
+  ["CR9", "4.91 L/100 km"]
 ]);
 
 class IssueList extends Component {
@@ -151,26 +155,6 @@ class IssueList extends Component {
     };
     if (this.state.airlines === "") {
       alert("Please select airlines");
-      return;
-    }
-
-    if (
-      (parseInt(this.state.startDate.getDate()[0]) > 3 &&
-        this.state.startDate.getDate().length > 1) ||
-      (parseInt(this.state.startDate.getDate()) < 10 &&
-        this.state.startDate.getDate().length < 2)
-    ) {
-      alert("please fix start day");
-      return;
-    }
-
-    if (
-      (parseInt((this.state.endDate.getDate() + "")[0]) > 3 &&
-        this.state.endDay.length > 1) ||
-      (parseInt(this.state.endDate.getDate()) < 10 &&
-        this.state.endDay.length < 2)
-    ) {
-      alert("please fix end day");
       return;
     }
 
@@ -346,6 +330,7 @@ class IssueList extends Component {
                     <MenuItem value={"32A"}>Airbus A320 (sharklets)</MenuItem>
                     <MenuItem value={"32B"}>Airbus A321 (sharklets)</MenuItem>
                     <MenuItem value={"77W"}>Boeing 777-300ER</MenuItem>
+                    <MenuItem value={"CR9"}>Bombardier CRJ900</MenuItem>
                   </Select>
                   <FormHelperText>Select an aircraft type</FormHelperText>
                 </FormControl>
