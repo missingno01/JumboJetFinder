@@ -7,18 +7,20 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  build_and_deploy:
+  makeEnv:
     runs-on: ubuntu-latest
     steps:
-      - name: Make env
-        uses: SpicyPizza/create-envfile@v1
+      - uses: SpicyPizza/create-envfile@v1
         with:
           envkey_REACT_APP_ID: ${{secrets.REACT_APP_ID}}
           envkey_REACT_APP_SECRET: ${{secrets.REACT_APP_SECRET}}
+  build_and_deploy:
+    needs: makeEnv
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+      - uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
