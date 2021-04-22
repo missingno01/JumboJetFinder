@@ -11,13 +11,14 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 
+
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-
+import { v4 as uuid_v4 } from "uuid";
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -95,6 +96,32 @@ class IssueList extends Component {
     this.handleEndYear = this.handleEndYear.bind(this);
   }
 
+  componentDidMount() {
+    var qs = require('qs');
+    var data = qs.stringify({
+      'client_id': process.env.REACT_APP_ID,
+      'client_secret': process.env.REACT_APP_SECRET,
+      'grant_type': 'client_credentials' 
+    });
+    var config = {
+      method: 'post',
+      url: 'https://api.lufthansa.com/v1/oauth/token',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      this.setState({
+        bearerToken: response.data.access_token,
+      });
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   leftClick() {
     // Changing state
     if (this.state.pageNum > 1) {
@@ -152,7 +179,7 @@ class IssueList extends Component {
     e.preventDefault();
     var config = {
       headers: {
-        Authorization: "Bearer evb3z8nwhvjjqcjnf4vpapm2",
+        Authorization: "Bearer " + this.state.bearerToken,
       },
     };
     if (this.state.airlines === "") {
@@ -222,7 +249,6 @@ class IssueList extends Component {
       .get(url, config)
       .then((res) => {
         if (res.status === 200 || res.status === 206) {
-          console.log(res.data);
           this.setState({
             isLoading: false,
             isLoaded: true,
@@ -237,36 +263,9 @@ class IssueList extends Component {
       });
   }
 
+  compondent
+
   render() {
-
-    var qs = require('qs');
-    var data = qs.stringify({
-      'client_id': '',
-      'client_secret': '',
-      'grant_type': 'client_credentials' 
-    });
-    var config = {
-      method: 'post',
-      url: 'https://api.lufthansa.com/v1/oauth/token',
-      headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data : data
-    };
-
-    axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      this.setState({
-        bearerToken: JSON.stringify(response.data).access_token,
-      });
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-
-
     const { classes } = this.props;
     let issueViews;
     if (this.state.isLoaded) {
@@ -287,7 +286,7 @@ class IssueList extends Component {
         .slice((this.state.pageNum - 1) * 10, this.state.pageNum * 10)
         .map((issue) => (
           <IssueView
-            key={issue.id}
+            key={uuid_v4()}
             issue={issue}
             setDetails={this.props.setDetails}
           />
