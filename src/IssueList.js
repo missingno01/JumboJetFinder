@@ -103,7 +103,6 @@ class IssueList extends Component {
       'client_secret': process.env.REACT_APP_SECRET,
       'grant_type': 'client_credentials' 
     });
-    console.log(data);
     var config = {
       method: 'post',
       url: 'https://api.lufthansa.com/v1/oauth/token',
