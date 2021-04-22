@@ -10,10 +10,10 @@ jobs:
   makeEnv:
     runs-on: ubuntu-latest
     steps:
-      - uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_REACT_APP_ID: ${{secrets.REACT_APP_ID}}
-          envkey_REACT_APP_SECRET: ${{secrets.REACT_APP_SECRET}}
+      - run: touch .env 
+      - run: echo REACT_APP_ID=${{secrets.REACT_APP_ID}} >> .env
+      - run: echo REACT_APP_SECRET=${{secrets.REACT_APP_SECRET}} >> .env
+      - run: cat .env
   build_and_deploy:
     needs: makeEnv
     runs-on: ubuntu-latest
