@@ -78,7 +78,9 @@ class IssueList extends Component {
       startDate: new Date(),
       endDate: new Date(),
       status: 0,
+      bearerToken: "",
     };
+    this.render = this.render.bind(this);
     this.leftClick = this.leftClick.bind(this);
     this.rightClick = this.rightClick.bind(this);
     this.handleAirlines = this.handleAirlines.bind(this);
@@ -150,7 +152,7 @@ class IssueList extends Component {
     e.preventDefault();
     var config = {
       headers: {
-        Authorization: "Bearer 46cbcfqj8jbezhz8d9aecfpg",
+        Authorization: "Bearer evb3z8nwhvjjqcjnf4vpapm2",
       },
     };
     if (this.state.airlines === "") {
@@ -236,6 +238,35 @@ class IssueList extends Component {
   }
 
   render() {
+
+    var qs = require('qs');
+    var data = qs.stringify({
+      'client_id': '',
+      'client_secret': '',
+      'grant_type': 'client_credentials' 
+    });
+    var config = {
+      method: 'post',
+      url: 'https://api.lufthansa.com/v1/oauth/token',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      this.setState({
+        bearerToken: JSON.stringify(response.data).access_token,
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
+
     const { classes } = this.props;
     let issueViews;
     if (this.state.isLoaded) {
