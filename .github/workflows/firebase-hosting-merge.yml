@@ -12,16 +12,14 @@ jobs:
     steps:
       - name: Make env
         uses: SpicyPizza/create-envfile@v1
-        with:  
+        with:
           envkey_REACT_APP_ID: ${{secrets.REACT_APP_ID}}
           envkey_REACT_APP_SECRET: ${{secrets.REACT_APP_SECRET}}
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUMBOJETFINDER }}"
-          channelId: live
-          projectId: jumbojetfinder
+          args: deploy --only hosting
         env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
