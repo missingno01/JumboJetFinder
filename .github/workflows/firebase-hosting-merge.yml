@@ -13,8 +13,8 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          envKey_REACT_APP_ID: ${{secrets.REACT_APP_ID}}
-          envKey_REACT_APP_SECRET: ${{secrets.REACT_APP_SECRET}}
+          envkey_REACT_APP_ID: ${{secrets.REACT_APP_ID}}
+          envkey_REACT_APP_SECRET: ${{secrets.REACT_APP_SECRET}}
       - run: cat .env
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
